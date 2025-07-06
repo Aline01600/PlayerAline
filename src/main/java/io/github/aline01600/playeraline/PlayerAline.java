@@ -13,7 +13,9 @@ import io.github.guisso.meleeinterface.IPlayer;
  */
 public class PlayerAline 
         implements IPlayer{
-
+        boolean traicao = false;
+        int punicao = 2;
+        int punicaoAtual = 0;
     @Override
     public String getDeveloperName() {
         return "Aline";
@@ -26,7 +28,27 @@ public class PlayerAline
 
     @Override
     public Decision makeMyMove(Decision opponentPreviousMove) {
+        
+        if (opponentPreviousMove == null) {
+            return Decision.COOPERATE;
+        }
+
+        if (!traicao && opponentPreviousMove == Decision.DEFECT) {
+            traicao = true;
+            punicaoAtual = punicao;
+            punicao *= 2;
+        }
+
+        if (traicao && punicaoAtual > 0) {
+            punicaoAtual--;
+            if (punicaoAtual == 0) {
+                traicao = false;
+            }
+            return Decision.DEFECT;
+        }
+
         return Decision.COOPERATE;
+        
     }
 
 }
