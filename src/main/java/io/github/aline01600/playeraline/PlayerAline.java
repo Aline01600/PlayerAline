@@ -16,6 +16,7 @@ public class PlayerAline
         boolean traicao = false;
         int punicao = 2;
         int punicaoAtual = 0;
+        boolean emPunicao = false;
     @Override
     public String getDeveloperName() {
         return "Aline";
@@ -29,26 +30,21 @@ public class PlayerAline
     @Override
     public Decision makeMyMove(Decision opponentPreviousMove) {
         
-        if (opponentPreviousMove == null) {
-            return Decision.COOPERATE;
-        }
-
-        if (!traicao && opponentPreviousMove == Decision.DEFECT) {
-            traicao = true;
-            punicaoAtual = punicao;
-            punicao *= 2;
-        }
-
-        if (traicao && punicaoAtual > 0) {
+        if (emPunicao) {
             punicaoAtual--;
             if (punicaoAtual == 0) {
-                traicao = false;
+                emPunicao = false;
             }
             return Decision.DEFECT;
         }
 
+        if (opponentPreviousMove == Decision.DEFECT && !emPunicao){
+            emPunicao = true;
+            punicaoAtual = punicao;
+            punicao *= 2;
+            return Decision.DEFECT;
+        }
         return Decision.COOPERATE;
-        
     }
 
 }
